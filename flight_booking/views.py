@@ -1,9 +1,75 @@
 from django.shortcuts import render
 from Airline.models import Airline
-from Flight.models import Flight
+from Flight.models import Flight, Flight_component
 import math
+# from flight_booking import core_funtion
 
+def fetchsearch(request):
+    depart_str = 'mumbai'
+    arrive_str = 'banglore'
+    fetch_flights = []
+    No = 0;
+    
+    for i in Flight.objects.all():
+        
+        routes_dist_str = i.Dist_bet_airports
+        routes_str = i.Routes
+        Airline_logo = i.Airline_id.Airline_Photo
+        Airline_name = i.Airline_id.Airline_name
+        start_time = float(i.Depart_time)
+        Price = 100
+        
+        routes_path = routes_str.split(",")
+        test_dist = routes_dist_str.split(",")
+        routes_distance = [int(i) for i in test_dist]
+        routes_time = find_time_between_place(routes_distance)
+        dist = {}
 
+        for i in range(len(routes_distance)+1):
+            dist[routes_path[i]] = i
+
+        depart_index = dist[depart_str]
+        arrive_index = dist[arrive_str]
+
+        if depart_index < arrive_index:
+            # cover_path1  include all place which would cover into flight path
+            cover_path1 = [routes_time[i] for i in range(
+                len(routes_distance)) if i < arrive_index and i >= depart_index]
+            # cover_path2  include all place which are come before starting place
+            cover_path2 = [routes_time[i]
+                           for i in range(len(routes_distance)) if i < depart_index]
+            # result
+            depart_time = convert12(convert_timeduration(start_time + sum(cover_path2)))
+            arrive_time = convert12(convert_timeduration(sum(cover_path1)+start_time+sum(cover_path2)))
+            duration_time = convert12(convert_timeduration(sum(cover_path1)))
+            temp_duration = duration_time.split(":")
+            duration_time = str(temp_duration[0]) + \
+                " Hour " + str(temp_duration[1]) + " minute"
+            fetch_flights.append(Flight_component(No,Airline_logo, Airline_name,depart_str,arrive_str,duration_time,Price, depart_time,arrive_time))
+            No+=1;
+            
+            # print("flight found")
+            # print(depart_str + " to " + arrive_str)
+            # print("total Duration is " + duration_time)
+            # print("depart time is " + depart_time)
+            # print("arrive time is " + arrive_time)
+        else:
+            print("flight not found")
+                      
+    return render(request, 'fetchflights.html', {"Flights": fetch_flights})
+
+def Home(request):
+    
+    if request.method == 'POST':
+        depart_str   = request.POST.get('depart')
+        arrive_str = request.POST.get('arrive')
+        Arriving_time = request.POST.get('depart_date')
+        Total_ticket = request.POST.get('passenger_number')
+        
+        
+        # User.objects.create_user(depart_str,email,password)
+    
+    return render(request, 'home.html')
 def find_time_between_place(dist):
     result = []
     for i in range(len(dist)):
@@ -40,49 +106,3 @@ def convert12(str):
             ans = ans + str[i]
     return ans + " " + Meridien
 
-
-def start(request):
-    
-    for i in Flight.objects.all():
-        print(i.Airline_id.Airline_Id)
-        str1 = i.Routes
-        str2 = i.Dist_bet_airports
-        start_time = float(i.Arriving_time)
-        depart_str = 'surat'
-        arrive_str = 'kolkata'
-
-        routes_path = str1.split(",")
-        test_dist = str2.split(",")
-        routes_distance = [int(i) for i in test_dist]
-        routes_time = find_time_between_place(routes_distance)
-        dist = {}
-
-        for i in range(len(routes_distance)+1):
-            dist[routes_path[i]] = i
-
-        depart_index = dist[depart_str]
-        arrive_index = dist[arrive_str]
-
-        if depart_index < arrive_index:
-            # cover_path1  include all place which would cover into flight path
-            cover_path1 = [routes_time[i] for i in range(
-                len(routes_distance)) if i < arrive_index and i >= depart_index]
-            # cover_path2  include all place which are come before starting place
-            cover_path2 = [routes_time[i]
-                           for i in range(len(routes_distance)) if i < depart_index]
-            # result
-            depart_time = convert12(convert_timeduration(start_time + sum(cover_path2)))
-            arrive_time = convert12(convert_timeduration(sum(cover_path1)+start_time+sum(cover_path2)))
-            duration_time = convert12(convert_timeduration(sum(cover_path1)))
-            temp_duration = duration_time.split(":")
-            duration_time = str(temp_duration[0]) + \
-                " Hour " + str(temp_duration[1]) + " minute"
-            print("flight found")
-            print(depart_str + " to " + arrive_str)
-            print("total Duration is " + duration_time)
-            print("depart time is " + depart_time)
-            print("arrive time is " + arrive_time)
-        else:
-            print("flight not found")
-
-    return render(request, 'index.html')

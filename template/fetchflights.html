@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+</head>
+<body class="flex justify-center items-center h-screen ">
+    {% for i in Flights %}
+    <div class="relative max-w-lg shadow-md bg-gradient-to-r from-indigo-700 to-indigo-600">
+        <div class="flex items-center p-4">
+          <img src="/media/{{i.Airline_logo}}"  class="w-28 h-28 rounded-full" alt="{{ Airline_name }} logo">
+          <div class="m-4">
+            <h2 class="text-white text-lg font-medium">{{ i.Airline_name }}</h2>
+            <p class="text-white text-sm font-medium">{{ i.Flightname1 }}</p>
+            <p class="text-white text-sm font-medium">{{ i.Flightname2 }}</p>
+          </div>
+          <div class="ml-auto flex-shrink-0">
+            <div class="flex flex-col text-white text-sm font-medium">
+              <div>Duration: {{ i.Timeduration }}</div>
+              <div>Price: {{ i.Price }}</div>
+              <div>Departure: {{ i.Depart_time }}</div>
+              <div>Arrival: {{ i.Arrive_time }}</div>
+            </div>
+          </div>
+        </div>
+        <button class=" bottom-10 right-0 m-4 px-4 py-2 rounded-md text-white bg-red-800 hover:bg-red-700">Book Now</button>
+      </div>      
+    {% endfor %}
+</body>
+</html>
