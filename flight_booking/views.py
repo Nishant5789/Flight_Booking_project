@@ -45,7 +45,6 @@ def handle_confirmation(request, Temparal_ID):
                   departure, arrival, boarding_Time)
     
     
-    
     return render(request, "confirmation.html")
 def fetchsearch(request):
     depart_str   = request.POST.get('depart')
@@ -179,6 +178,7 @@ def find_time_between_place(dist):
     for i in range(len(dist)):
         result.append(abs(dist[i])/115)
     return result
+
 def convert_timeduration(time):
     floor_hour = math.floor(time)
     hour = f'{floor_hour:02d}'
