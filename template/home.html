@@ -4,34 +4,75 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+    <title>Flightoh</title>
+    <!-- tailwind cdn link -->
+    <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- add blow three cdn link for run autoserch feature -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="flex justify-center items-center h-screen ">
-    <form class="bg-gray-200  px-28 py-7" action="/fetchflights">
+<body>
+
+  <nav class="bg-red-800 text-white  text-xl flex items-center justify-between px-4 py-3">
+    <div class="flex items-center">
+      <img class="w-16 h-16 mr-4" src="/Source code/Travellogo(1).png" alt="Logo">
+      <h1 class="font-medium">Flightoh</h1>
+    </div>
+    <div class="flex items-center">
+      <a class="text-white hover:text-gray-500 mr-4" href="#">Hotel</a>
+      <div class="relative">
+        <a class="text-white hover:text-gray-500 mr-4" href="#">For Airline</a>
+        <div class="absolute hidden rounded-md bg-white">
+          <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Add Flight</a>
+          <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Delete Flight</a>
+          <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Update Flight</a>
+        </div>
+      </div>
+      <a class="text-white hover:text-gray-500 mr-4" href="#">Customer Support</a>
+      <img class="rounded-full w-14" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Avatar">
+    </div>
+  </nav>
+
+  <div class="flex justify-center items-center h-screen ">
+    <form class="bg-gray-200  px-28 py-7" action="/fetchflights/" method="POST">
+      {% csrf_token %}
+      <label class=" block text-gray-700 font-medium mb-2 mt-4" data-provide="typeahead" for="depart">
+        Depart
+      </label>
+      <input id="depart" class="typeahead bg-white rounded-lg p-2 w-full" name="depart" data-provide="typeahead type="text">
         <label class="block text-gray-700 font-medium mb-2" for="arrive">
           Arrive
         </label>
-        <input class="bg-white rounded-lg p-2 w-full" type="text" id="arrive" name="arrive">
-      
-        <label class="block text-gray-700 font-medium mb-2 mt-4" for="depart">
-          Depart
-        </label>
-        <input class="bg-white rounded-lg p-2 w-full" type="text" id="depart" name="depart">
-      
+        <input id="arrive" class="typeahead bg-white rounded-lg p-2 w-full" name="arrive" data-provide="typeahead" type="text">
+        
         <label class="block text-gray-700 font-medium mb-2 mt-4" for="depart_date">
           Depart Date
         </label>
-        <input class="bg-white rounded-lg p-2 w-full" type="text" id="depart_date" name="depart_date">
-      
-        <label class="block text-gray-700 font-medium mb-2 mt-4" for="passenger_number">
-          Passenger Number
-        </label>
-        <input class="bg-white rounded-lg p-2 w-full" type="text" id="passenger_number" name="passenger_number">
-      
+        <input id="depart_date" class="bg-white rounded-lg p-2 w-full" name="depart_date" type="text">
+        
         <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-full mt-6 px-4 py-2 " type="submit">
           Submit
         </button>
       </form>
+      </div>
+
+      <script>        
+        var $input = $(".typeahead");
+        $input.typeahead({
+            source: ['AHMEDABAD', 'SURAT', 'MUMBAI', 'HYDERABAD', 'BANGLORE', 'CHENNAI', 'KOLKATA', 'LUCKNOW', 'DELHI'],
+            autoSelect: true,
+        });
+        $input.change(function () {
+            var current = $input.typeahead("getActive");
+            matches = [];
+            if (current) {
+                if (current.name == $input.val()) {
+                    matches.push(current.name);
+                }
+            }
+        });
+    </script>
+
 </body>
 </html>

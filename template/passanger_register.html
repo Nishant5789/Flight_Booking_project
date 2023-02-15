@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-blue-400">
+
+    <!-- // navbar  -->
+    <nav class="bg-red-800 text-white  text-xl flex items-center justify-between px-4 py-3">
+      <div class="flex items-center">
+        <img class="w-16 h-16 mr-4" src="/Source code/Travellogo(1).png" alt="Logo">
+        <h1 class="font-medium">Company Name</h1>
+      </div>
+      <div class="flex items-center">
+        <a class="text-white hover:text-gray-500 mr-4" href="#">Hotel</a>
+        <div class="relative">
+          <a class="text-white hover:text-gray-500 mr-4" href="#">For Airline</a>
+          <div class="absolute hidden rounded-md bg-white">
+            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Add Flight</a>
+            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Delete Flight</a>
+            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Update Flight</a>
+          </div>
+        </div>
+        <a class="text-white hover:text-gray-500 mr-4" href="#">Customer Support</a>
+        <img class="rounded-full w-14" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Avatar">
+      </div>
+    </nav>
+
+    <!-- flight review page  -->
+
+    <div class="flex justify-evenly text-center h-30 w-full bg-gray-300">
+      <div class="flex-col p-4">
+        <img src="/flight_booking/media/media/download_1.png" alt="Airline Logo" class="w-16 h-12 mb-4">
+        <h3 class="text-lg font-medium mb-2">Airline Name</h3>
+      </div>
+        <div class="flex justify-between items-center gap-x-10">
+            <p>Depart Airport</p>
+            <p class="text-xl font-medium">Time Duration</p>
+            <p>Arrive Airport</p>
+        </div>
+    </div>
+ 
+    <div class=" w-full bg-gree">
+      <form action="/bookticket/{{Temparal_ID}}/" method="post">
+        {% csrf_token %}
+      <div class="flex flex-col items-center justify-center p-4">
+        <h1 class="text-xl font-bold">Add Passenger Details</h1>
+        <div class="flex flex-col items-center justify-between w-full mt-4">
+          <div class="flex flex-col">
+            <h2 class="text-md font-medium">Passenger 1:</h2>
+            <div class="flex flex-row items-center justify-between w-full mt-2">
+              <input class=" border-2 focus:border-black focus:outline-none p-2" type="text" placeholder="Name" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="DOB" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="Gender" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+            </div>
+            <h2 class="text-md font-medium">Passenger 2:</h2>
+            <div class="flex flex-row items-center justify-between w-full mt-2">
+              <input class=" border-2 focus:border-black focus:outline-none p-2" type="text" placeholder="Name" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="DOB" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="Gender" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <h2 class="text-md font-medium">Contact Information:</h2>
+            <div class="flex flex-row items-center justify-between w-full mt-2">
+              <input class="border-2 focus:border-black focus:outline-none p-2" type="text" placeholder="Phone Number" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class="border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="Email Address" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row items-center justify-center w-full mt-4">
+          <button class="bg-red-500 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg shadow-lg">Cancel</button>
+          <button class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-lg ml-4 shadow-lg" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      let dropdownMenu = document.querySelector(".absolute");
+      let dropdownButton = document.querySelector(".relative");
+      dropdownButton.addEventListener("mouseover", function () {
+        dropdownMenu.classList.remove("hidden");
+      });
+      dropdownButton.addEventListener("mouseout", function () {
+        dropdownMenu.classList.add("hidden");
+      });
+    </script>
+  </body>
+</html>
