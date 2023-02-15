@@ -1,6 +1,6 @@
-from django.db import models
 from Airline.models import Airline
 
+from django.db import models
 
 class Flight(models.Model):
     Flight_id = models.IntegerField(primary_key=True)
