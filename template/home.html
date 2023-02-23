@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +13,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+  .carousel-item-1 {
+  background-image: url("/media/media/home_background.jpg");
+}
+
+.carousel-item-2 {
+  background-image: url("/media/media/home_background2.jpg");
+}
+
+.carousel-item-3 {
+  background-image: url("/media/media/home_background3.jpg");
+}
+</style>
+
 <body>
 
-  <nav class="bg-red-800 text-white  text-xl flex items-center justify-between px-4 py-3">
+  <nav class="bg-red-800 text-white text-xl flex items-center justify-between px-4 py-3">
     <div class="flex items-center">
       <img class="w-16 h-16 mr-4" src="/Source code/Travellogo(1).png" alt="Logo">
       <h1 class="font-medium">Flightoh</h1>
@@ -30,34 +45,48 @@
         </div>
       </div>
       <a class="text-white hover:text-gray-500 mr-4" href="#">Customer Support</a>
-      <img class="rounded-full w-14" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Avatar">
+      <div class="relative">
+        <button class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-white bg-gray-700  rounded-md hover:bg-gray-600 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50" onclick="toggleDropdown()">
+          <img class="rounded-full w-14" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Avatar">
+          <svg id="dropdown-arrow" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10.707 14.707a1 1 0 0 1-1.414 0l-5-5a1 1 0 0 1 1.414-1.414L10 12.586l4.293-4.293a1 1 0 1 1 1.414 1.414l-5 5z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <div id="dropdown-menu" class="absolute z-10  top-full  mt-2 py-2 bg-white rounded-md shadow-lg hidden">
+          <a href="#" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Link 1</a>
+          <a href="#" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Link 2</a>
+          <a href="#" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Link 3</a>
+        </div>
+      </div>
     </div>
   </nav>
-
-  <div class="flex justify-center items-center h-screen ">
-    <form class="bg-gray-200  px-28 py-7" action="/fetchflights/" method="POST">
-      {% csrf_token %}
-      <label class=" block text-gray-700 font-medium mb-2 mt-4" data-provide="typeahead" for="depart">
-        Depart
-      </label>
-      <input id="depart" class="typeahead bg-white rounded-lg p-2 w-full" name="depart" data-provide="typeahead type="text">
-        <label class="block text-gray-700 font-medium mb-2" for="arrive">
+  <div id="carousel" class="w-full  bg-center bg-cover flex items-center justify-center">
+    <div class="flex justify-center items-center">
+      <form class="px-2 py-7" action="/fetchflights/" method="POST">
+        {% csrf_token %}
+        <label class=" block text-gray-900 font-bold text-xl mb-2" data-provide="typeahead" for="depart">Depart</label>
+        <input id="depart" class="typeahead bg-white rounded-lg p-2 w-full" name="depart" data-provide="typeahead type="text">
+        <label class="block text-gray-900 font-bold text-xl mb-2" for="arrive">
           Arrive
         </label>
         <input id="arrive" class="typeahead bg-white rounded-lg p-2 w-full" name="arrive" data-provide="typeahead" type="text">
-        
-        <label class="block text-gray-700 font-medium mb-2 mt-4" for="depart_date">
-          Depart Date
+        <label class="block text-gray-900 font-bold text-xl mb-2 mt-4" for="depart_date">
+          Choose a date:
         </label>
-        <input id="depart_date" class="bg-white rounded-lg p-2 w-full" name="depart_date" type="text">
-        
+        <input id="depart_date" class="bg-white rounded-lg p-2 w-full" name="depart_date" type="date">
+        <label for="traveler_class" class="block text-gray-900 font-bold text-xl mb-2">Choose traveller class </label>
+        <select id="select" name="traveler_class" class="block w-full py-2 pl-3 pr-10 mt-1 text-base bg-white border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+          <option value="option1">Economy</option>
+          <option value="option2">Business</option>
+          <option value="option3">premium Business</option>
+        </select>
         <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-full mt-6 px-4 py-2 " type="submit">
           Submit
         </button>
       </form>
-      </div>
-
-      <script>        
+    </div>
+  </div>
+  <script>        
         var $input = $(".typeahead");
         $input.typeahead({
             source: ['AHMEDABAD', 'SURAT', 'MUMBAI', 'HYDERABAD', 'BANGLORE', 'CHENNAI', 'KOLKATA', 'LUCKNOW', 'DELHI'],
@@ -72,6 +101,27 @@
                 }
             }
         });
+
+        // avatar dropdown menu
+        function toggleDropdown() {
+        const dropdownMenu = document.getElementById("dropdown-menu");
+        const dropdownArrow = document.getElementById("dropdown-arrow");
+        dropdownMenu.classList.toggle("hidden");
+        dropdownArrow.classList.toggle("rotate-180");
+        }
+
+        // carosoul
+        const carousel = document.getElementById("carousel");
+        const images = ["carousel-item-1", "carousel-item-2", "carousel-item-3"];
+        let currentIndex = 0;
+
+        function changeBackground() {
+          currentIndex = (currentIndex + 1) % images.length;
+          carousel.classList.remove(...images);
+          carousel.classList.add(images[currentIndex]);
+        }
+        setInterval(changeBackground, 2000);
+
     </script>
 
 </body>

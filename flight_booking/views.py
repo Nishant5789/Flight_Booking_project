@@ -29,14 +29,14 @@ def addpassengerdetails(request, Temparal_ID):
 def handle_confirmation(request, Temparal_ID):
     
     flight = Flight_component.objects.get(pk=Temparal_ID)
-    file_name = str(flight_id)+id.time_hi_version+".pdf"
+    file_name = str(flight.Flight_Id)+".pdf"
     airline_name = flight.Airline_name
     airline_logo = flight.Airline_logo 
     passenger_name1 = request.POST.get('passenger1')
     passenger_name2 = request.POST.get('passenger2')
     departure = flight.Flightname1
     arrival = flight.Flightname2
-    boarding_Time = Depart_time
+    boarding_Time = flight.Depart_time
     # flight_date = ""
     # flight_id = ""
     # seat_no = ""
@@ -63,6 +63,8 @@ def fetchsearch(request):
         Flight_Id = i.Flight_id
         start_time = float(i.Depart_time)
         Total_ticket = i.Total_ticket
+        
+        print("flight_id",Flight_Id)
         
         routes_path = routes_str.split(",")
         test_dist = routes_dist_str.split(",")
@@ -108,12 +110,6 @@ def fetchsearch(request):
             )
             fetch_flights.append(Flight_component.objects.get(pk=unique_id))
             No+=1;
-          
-            # print("flight found")
-            # print(depart_str + " to " + arrive_str)
-            # print("total Duration is " + duration_time)
-            # print("depart time is " + depart_time)
-            # print("arrive time is " + arrive_time)
         else:
             print("flight not found")
         
@@ -124,12 +120,11 @@ def fetchsearch(request):
 def Home(request):
     return render(request, 'home.html')
 
-def pdf_generator(file_name, airline_name, airline_logo, passenger_name1,
-                  departure, arrival, boarding_Time):
-    
+def pdf_generator(file_name, airline_name, airline_logo, passenger_name1, passenger_name2 ,departure, arrival, boarding_Time):
     flight_date = "12-3-2-2023"
     flight_id = "b-10234"
     seat_no = "ce008"
+    passenger_name = 'nishant'
     
     pdf_file = canvas.Canvas(file_name, pagesize=letter)
 
