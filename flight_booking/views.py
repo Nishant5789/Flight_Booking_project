@@ -18,13 +18,11 @@ def addpassengerdetails(request, Temparal_ID):
     print("adding details")     
     No_ticket = request.POST.get('Ticket')
     flight_id = Flight_component.objects.get(pk=Temparal_ID).Flight_Id
-    # print(flight_id)
     Current_ticket = Flight.objects.get(pk=flight_id).Total_ticket
-    # print(Current_ticket)
     update_ticket = Current_ticket-int(No_ticket)
     Flight.objects.filter(pk=flight_id).update(Total_ticket=update_ticket)
     
-    return render(request, 'passanger_register.html', {"Temparal_ID":Temparal_ID})
+    return render(request, 'passanger_register.html', {"No_of_passenger":No_ticket,})
 
 def handle_confirmation(request, Temparal_ID):
     
