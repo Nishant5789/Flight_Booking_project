@@ -1,5 +1,4 @@
 from Airline.models import Airline
-
 from django.db import models
 
 class Flight(models.Model):
