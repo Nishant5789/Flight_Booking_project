@@ -9,6 +9,6 @@ urlpatterns = [
     path('', views.Home),
     path('fetchflights/', views.fetchsearch),
     path('fetchflights/<slug:Temparal_ID>/', views.addpassengerdetails, name="addpassengerdetails"),
-    path('bookticket/<slug:Temparal_ID>/', views.handle_confirmation, name="handle_confirmation"),
+    path('bookticket/<slug:Temparal_ID>/<slug:No_ticket>', views.handle_confirmation, name="handle_confirmation"),
     path('manageflight/', include('Airline.urls'))
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

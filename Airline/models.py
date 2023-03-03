@@ -11,12 +11,12 @@ class Airline(models.Model):
          return str(self.Airline_Id)
      
 # class Airline_manager(models.Manager):
-#     Airline_MId = models.IntegerField(primary_key=True)
-#     key_password = models.CharField(max_length=10)
+#     Airline_username = models.IntegerField(primary_key=True)
+#     Airlien_password = models.CharField(max_length=10)
 #     Airline_id = models.ForeignKey(Airline, on_delete=models.CASCADE)
     
 #     def __str__(self):
-#          return self.Airline_MId
+#          return self.Airline_username
     
      
 

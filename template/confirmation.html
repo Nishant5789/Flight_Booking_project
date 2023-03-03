@@ -6,77 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
   </head>
   <body class="bg-blue-400">
 
-    <!-- // navbar  -->
-    <nav class="bg-red-800 text-white  text-xl flex items-center justify-between px-4 py-3">
-      <div class="flex items-center">
-        <img class="w-16 h-16 mr-4" src="/Source code/Travellogo(1).png" alt="Logo">
-        <h1 class="font-medium">Company Name</h1>
-      </div>
-      <div class="flex items-center">
-        <a class="text-white hover:text-gray-500 mr-4" href="#">Hotel</a>
-        <div class="relative">
-          <a class="text-white hover:text-gray-500 mr-4" href="#">For Airline</a>
-          <div class="absolute hidden rounded-md bg-white">
-            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Add Flight</a>
-            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Delete Flight</a>
-            <a class="block px-8 py-2 text-md text-gray-700 hover:bg-gray-100" href="#">Update Flight</a>
-          </div>
-        </div>
-        <a class="text-white hover:text-gray-500 mr-4" href="#">Customer Support</a>
-        <img class="rounded-full w-14" src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" alt="Avatar">
-      </div>
-    </nav>
-
-    <!-- flight review page  -->
-    <div class="flex justify-evenly text-center h-30 w-full bg-gray-300">
-      <div class="flex-col p-4">
-        <img class="w-16 h-12 mb-4" src="/flight_booking/media/media/download_1.png" alt="Airline Logo">
-        <h3 class="text-lg font-medium mb-2">Airline Name</h3>
-      </div>
-        <div class="flex justify-between items-center gap-x-10">
-            <p>Depart Airport</p>
-            <p class="text-xl font-medium">Time Duration</p>
-            <p>Arrive Airport</p>
-        </div>
-    </div>
+    {% include 'navbar.html' %}
 
     <div class="h-screen w-full bg-cover bg-40">
         <div class="flex flex-col items-center">
           <h1 class="text-5xl m-4">Congralations </h1>
           <h3 class="text-2xl  m-4">Download Your Ticket for Journey</h1>
-          <table class="m-4 border w-60% text-center">
-            <thead class="font-extrabold text-xl">
-              <tr>
-                <th class="border px-10 py-5">No</th>
-                <th class="border px-10 py-5">Ticket Name</th>
-                <th class="border px-10 py-5">Download</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="border">1</td>
-                <td class="border">Ticket 1</td>
-                <td class="border"><button class="bg-red-500 hover:bg-red-700 border-2 border-red-500 hover:border-red-700 text-white font-medium py-2 px-4 rounded-lg hover:shadow-xl" onclick="this.classList.toggle('border-4')">Download</button>
-
-</td>
-              </tr>
-              <tr>
-                <td class="border">2</td>
-                <td class="border">Ticket 2</td>
-                <td class="border"><button class="bg-red-500 hover:bg-red-700 border-2 border-red-500 hover:border-red-700 text-white font-medium py-2 px-4 rounded-lg hover:shadow-xl" onclick="this.classList.toggle('border-4')">Download</button>
-
-</td>
-              </tr>
-            </tbody>
-          </table>
+            <p>/{{pdfname}}/</p>
+            <a href="/{{pdfname}}/" download="">Download</a>
+            <a href="/">Back to Home</a>
+            
         </div>
       </div>
+      <script>
+           // nav bar feature 
+         // Toggle dropdown menu for flights button
+      function toggleDropdown() {
+        document.getElementById("dropdown").classList.toggle("hidden");
+      }
       
-      
- 
+      // Toggle dropdown menu for avatar
+      function toggleAvatarDropdown() {
+        document.getElementById("avatar-dropdown").classList.toggle("hidden");
+      }
+      // submit manage airline
+        const form = document.querySelector('#airline_login');
+        const submitBtn = document.querySelector('#airline_submit');
 
+        submitBtn.addEventListener('click', (event) => {
+        event.preventDefault(); 
+        const input_airline_id = document.getElementById("airline_id").value;
+        const input_airline_password = document.getElementById("airline_password");
+        const action = `/manageflight/${input_airline_id}/`;
+        form.action = action;
+        form.submit(); // submit the form with the new action
+    });
+      </script>
   </body>
 </html>

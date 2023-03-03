@@ -9,41 +9,60 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Image, Table, TableStyle
+
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 from django.db import IntegrityError
 import uuid  
 from django.views.decorators.csrf import csrf_protect
 
 def addpassengerdetails(request, Temparal_ID):
-
     print("adding details")     
     No_ticket = request.POST.get('Ticket')
-    flight_id = Flight_component.objects.get(pk=Temparal_ID).Flight_Id
+    Flight_component_object = Flight_component.objects.get(pk=Temparal_ID)
+    flight_id = Flight_component_object.Flight_Id
     Current_ticket = Flight.objects.get(pk=flight_id).Total_ticket
     update_ticket = Current_ticket-int(No_ticket)
     Flight.objects.filter(pk=flight_id).update(Total_ticket=update_ticket)
     
-    return render(request, 'passanger_register.html', {"No_of_passenger":No_ticket,})
+    print(Flight_component_object)
+    number_list = []
+    for i in range(1, int(No_ticket)+1):
+        number_list.append(str(i))
+    
+    return render(request, 'passanger_register.html', {"number_list":number_list,"No_ticket": No_ticket,"flight_object":Flight_component_object})
 
-def handle_confirmation(request, Temparal_ID):
+def handle_confirmation(request, Temparal_ID, No_ticket):
     
     flight = Flight_component.objects.get(pk=Temparal_ID)
-    file_name = str(flight.Flight_Id)+".pdf"
+    
+    file_name = str(Temparal_ID)[0:6]+".pdf"
     airline_name = flight.Airline_name
     airline_logo = flight.Airline_logo 
-    passenger_name1 = request.POST.get('passenger1')
-    passenger_name2 = request.POST.get('passenger2')
+    
     departure = flight.Flightname1
     arrival = flight.Flightname2
     boarding_Time = flight.Depart_time
     # flight_date = ""
-    # flight_id = ""
     # seat_no = ""
+    list_passenger = []
     
-    pdf_generator(file_name, airline_name, airline_logo, passenger_name1, passenger_name2,
+    for i in range(1, int(No_ticket)+1):
+        
+        passenger_dict = {
+            "passenger_name": request.POST.get("p_"+str(i)+"_name"),
+            "passenger_dob": request.POST.get("p_"+str(i)+"_dob"),
+            "passenger_gender": request.POST.get("p_"+str(i)+"_gender")
+        }
+        list_passenger.append(passenger_dict)
+    
+    pdf_generator(file_name, airline_name, list_passenger,
                   departure, arrival, boarding_Time)
     
     
-    return render(request, "confirmation.html")
+    return render(request, "confirmation.html", {"pdfname": file_name})
+
 def fetchsearch(request):
     depart_str   = request.POST.get('depart')
     arrive_str = request.POST.get('arrive')
@@ -65,6 +84,7 @@ def fetchsearch(request):
         print("flight_id",Flight_Id)
         
         routes_path = routes_str.split(",")
+        # print("flight_id",routes_path)
         test_dist = routes_dist_str.split(",")
         routes_distance = [int(i) for i in test_dist]
         routes_time = find_time_between_place(routes_distance)
@@ -72,6 +92,8 @@ def fetchsearch(request):
 
         for i in range(len(routes_distance)+1):
             dist[routes_path[i]] = i
+        
+        # print(dist)
 
         depart_index = dist[depart_str]
         arrive_index = dist[arrive_str]
@@ -107,7 +129,7 @@ def fetchsearch(request):
                 Arrive_time=arrive_time
             )
             fetch_flights.append(Flight_component.objects.get(pk=unique_id))
-            No+=1;
+            print(Flight_component.objects.get(pk=unique_id).Total_ticket)
         else:
             print("flight not found")
         
@@ -118,50 +140,61 @@ def fetchsearch(request):
 def Home(request):
     return render(request, 'home.html')
 
-def pdf_generator(file_name, airline_name, airline_logo, passenger_name1, passenger_name2 ,departure, arrival, boarding_Time):
-    flight_date = "12-3-2-2023"
-    flight_id = "b-10234"
-    seat_no = "ce008"
-    passenger_name = 'nishant'
+def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
+    # Create a new PDF document
+    doc = SimpleDocTemplate(file_name)
+    # Create a list to hold the elements to be included in the PDF document
+    elements = []
+    # Add the airline name and logo to the document
+    elements.append(Paragraph(airline_name, getSampleStyleSheet()['Heading1']))
+    # airline_logo = 'path/to/airline_logo.png'
+    # elements.append(Paragraph(f'<img src="{airline_logo}" width="80" height="80"/>', getSampleStyleSheet()['Normal']))
+
+    # Add the departure, arrival, and boarding time to the document
+    elements.append(Paragraph(f'Departure: {departure}', getSampleStyleSheet()['Normal']))
+    elements.append(Paragraph(f'Arrival: {arrival}', getSampleStyleSheet()['Normal']))
+    elements.append(Paragraph(f'Boarding Time: {boarding_Time}', getSampleStyleSheet()['Normal']))
+
+    # Create a list of lists to hold the data for the table
+    data = [['Passenger Name', 'Date of Birth', 'Gender']]
+    for passenger in list_passenger:
+        data.append([passenger['passenger_name'], passenger['passenger_dob'], passenger['passenger_gender']])
+
+    # Create the table and set its style
+    table = Table(data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 1), (-1, -1), 12),
+        ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+    ]))
+
+    # Add the table to the document
+    elements.append(table)
+
+    # Build the PDF document and save it to disk
+    doc.build(elements)
+   
+
     
-    pdf_file = canvas.Canvas(file_name, pagesize=letter)
+    
 
-    # # Add the airline logo
-    img = Image(airline_logo)
-    img.drawHeight = 1.5*inch*img.drawHeight / img.drawWidth
-    img.drawWidth = 1.5*inch
-    img.drawOn(pdf_file, 100, 610)
+        
 
-    # Add the airline name
-    pdf_file.setFont("Helvetica-Bold", 16)
-    pdf_file.drawString(100, 585, airline_name)
 
-    # Create a table for the passenger information
-    data = [['Passenger Name:', passenger_name],
-            ['Departure:', departure],
-            ['Arrival:', arrival],
-            ['boarding_Time:', boarding_Time],
-            ['Flight Date:', flight_date],
-            ['Flight ID:', flight_id],
-            ['Seat No:', seat_no],
-        ]
-    table = Table(data, colWidths=[100, 200])
-
-    # Set the table style
-    style = TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-                       ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                       ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                       ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                       ('BACKGROUND', (0, -1), (-1, -1), colors.beige),
-                       ('GRID', (0, 0), (-1, -1), 1, colors.black)])
-    table.setStyle(style)
-
-    # Draw the table on the PDF
-    table.wrapOn(pdf_file, 200, 600)
-    table.drawOn(pdf_file, 20, 450)
-
-    # Save the PDF
-    pdf_file.save()
+    
+    
+    
+    
+    
 
 
 

@@ -52,7 +52,7 @@
             action="/manageflight/update/{{flight.Flight_id}}/" method="POST">
               {% csrf_token %}
               {{flight.Routes | json_script:"routes_text"}}
-              {{flight.Dist_bet_airports | json_script:"distance_text"}}
+              {{flight.Timeduration | json_script:"time_duration_text"}}
               {{flight.Total_ticket | json_script:"total_tickets_text"}}
               {{flight.Depart_time | json_script:"depart_time_text"}}
               <h2 class="text-xl font-medium mb-4">flight detail</h2>
