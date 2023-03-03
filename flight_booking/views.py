@@ -74,6 +74,7 @@ def fetchsearch(request):
             dist[routes_path[i]] = i
 
         depart_index = dist[depart_str]
+        
         arrive_index = dist[arrive_str]
 
         if depart_index < arrive_index: 
