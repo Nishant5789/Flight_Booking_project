@@ -26,7 +26,8 @@
     </style>
 <body>
    {% include 'navbar.html' %}
-  <div id="carousel" class="w-full  bg-center bg-cover flex items-center justify-center">
+
+  <div id="carousel" class="w-full py-4  bg-center bg-cover flex items-center justify-center">
     <div class="flex justify-center items-center">
       <form class="px-2 py-7" id="form" action="/fetchflights/" method="POST">
         {% csrf_token %}
@@ -55,13 +56,13 @@
       </form>
     </div>
   </div>
+
   <script>   
         // nav bar feature 
          // Toggle dropdown menu for flights button
       function toggleDropdown() {
         document.getElementById("dropdown").classList.toggle("hidden");
       }
-      
       // Toggle dropdown menu for avatar
       function toggleAvatarDropdown() {
         document.getElementById("avatar-dropdown").classList.toggle("hidden");
@@ -69,7 +70,7 @@
       // submit manage airline
         const form = document.querySelector('#airline_login');
         const submitBtn = document.querySelector('#airline_submit');
-
+        
         submitBtn.addEventListener('click', (event) => {
         event.preventDefault(); 
         const input_airline_id = document.getElementById("airline_id").value;

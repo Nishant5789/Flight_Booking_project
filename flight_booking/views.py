@@ -2,6 +2,9 @@ from django.shortcuts import render
 from Airline.models import Airline
 from Flight.models import Flight
 from Flight.models import Flight_component
+from user.models import User_profile
+from django.utils.functional import SimpleLazyObject
+from django.contrib.auth import get_user
 import math
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -9,7 +12,6 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Image, Table, TableStyle
-
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
@@ -138,7 +140,15 @@ def fetchsearch(request):
     return render(request, 'fetchflights.html', {"Flights": fetch_flights})
 
 def Home(request):
+    user = get_user(request)
+    
+    if user.is_authenticated:
+        print(user.username)
+        profile = User_profile.objects.filter(Username = user).first().Profile
+        return render(request, 'home.html', {'profile_pic': profile})
+    
     return render(request, 'home.html')
+    
 
 def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
     # Create a new PDF document
