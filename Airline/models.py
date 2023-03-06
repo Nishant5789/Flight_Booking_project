@@ -10,8 +10,8 @@ class Airline(models.Model):
     def __str__(self):
          return str(self.Airline_Id)
      
-class Airline_manager(models.Manager):
-    Airline_username = models.IntegerField(primary_key=True)
+class Airline_manager(models.Model):
+    Airline_username = models.CharField(primary_key=True,max_length=10)
     Airlien_password = models.CharField(max_length=10)
     Airline_id = models.ForeignKey(Airline, on_delete=models.CASCADE)
     

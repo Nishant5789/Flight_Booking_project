@@ -74,7 +74,7 @@ def change_profile(request, username):
         User_profile_object.Profile = file_path
         User_profile_object.save()
         
-    return render(request, 'profile.html', {'user': user})
+    return HttpResponsePermanentRedirect('/auth/profile')
 
 def validate_username(username):
     # Check if the username contains at least one uppercase letter and more than two digits

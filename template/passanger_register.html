@@ -14,14 +14,14 @@
   <body class="bg-blue-400 ">
     <!-- <img src="../media/media/download_3.jpg" alt=""> -->
     <!-- // navbar  -->
-    {% include 'navbar.html' %}
+    {% include 'min_nav.html' %}
     <!-- flight review page  -->
-    <div class="flex justify-evenly text-center h-30 w-full bg-gray-300">
-      <div class="flex-col p-4">
-        <img src="/media/{{flight_object.Airline_logo}}" alt="Airline Logo" class="w-24 h-24 mb-4">
+    <div class="flex justify-evenly text-center h-28  w-full bg-gray-300">
+      <div class="flex items-center gap-x-2 py-2">
+        <img src="/media/{{flight_object.Airline_logo}}" alt="Airline Logo" class="w-20 h-20 ">
         <h3 class="text-lg font-medium font-extrabold mb-2">{{flight_object.Airline_name}}</h3>
       </div>
-      <div class="flex justify-between items-center gap-x-10">
+      <div class="flex justify-between items-center font-extrabold items-center gap-x-10">
           <p>{{flight_object.Flightname1}}</p>
           <p class="text-xl font-medium">{{flight_object.Timeduration}}</p>
           <p>{{flight_object.Flightname2}}</p>
@@ -32,14 +32,14 @@
       <form action="/bookticket/{{flight_object.Temparal_ID}}/{{No_ticket}}" method="post">
         {% csrf_token %}
       <div class="flex flex-col items-center justify-center p-4">
-        <h1 class="text-2xl shadow-2xl font-bold">Add Passenger Details</h1>
+        <h1 class="text-2xl bg-indigo-600 p-3 shadow-2xl font-bold">Add Passenger Details</h1>
         <div class="flex flex-col items-center justify-between w-full mt-4">
           <div class="flex flex-col">
             {% for i in number_list %}
             <h2 class="text-md font-medium">Passenger {{i}}:</h2>
             <div class="flex flex-row items-center justify-between w-full mt-2">
               <input name="p_{{i}}_name" class=" border-2 focus:border-black focus:outline-none p-2" type="text" placeholder="Name" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
-              <input name="p_{{i}}_dob" class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="DOB" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input name="p_{{i}}_dob" class=" border-2 focus:border-black focus:outline-none p-2 ml-2" type="date" placeholder="DOB" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
               <select id="" class="shadow-2xl  border-2 focus:border-black focus:outline-none p-2 ml-2" type="" placeholder="Gender" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')"
                name="p_{{i}}_gender">
                 <option>Choose Gender</option>
@@ -53,7 +53,7 @@
             <h2 class="text-md font-medium">Contact Information:</h2>
             <div class="flex flex-row items-center justify-between w-full mt-2">
               <input class="border-2 focus:border-black focus:outline-none p-2" type="text" placeholder="Phone Number" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
-              <input class="border-2 focus:border-black focus:outline-none p-2 ml-2" type="text" placeholder="Email Address" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
+              <input class="border-2 focus:border-black focus:outline-none p-2 ml-2" type="email" placeholder="Email Address" onfocus="this.classList.add('border-black')" onblur="this.classList.remove('border-black')">
             </div>
           </div>
         </div>

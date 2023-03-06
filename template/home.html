@@ -73,8 +73,10 @@
         
         submitBtn.addEventListener('click', (event) => {
         event.preventDefault(); 
-        const input_airline_id = document.getElementById("airline_id").value;
+        let input_airline_id = document.getElementById("airline_id").value;
         const input_airline_password = document.getElementById("airline_password");
+        console.log(input_airline_id);
+        input_airline_id = input_airline_id.toString().slice(-3);
         const action = `/manageflight/${input_airline_id}/`;
         form.action = action;
         form.submit(); // submit the form with the new action
