@@ -22,15 +22,12 @@ def auth_register(request):
         #     return render(request, 'register.html', {"error":"Username must be one Capital letter, more than two numbers"})
         
         user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
-            date_joined=timezone.now()
+             date_joined=timezone.now()
         )
         user.save()
-        print("save")
+        User_profile_object=User_profile(Username=user, Profile="custom_profile.jpg")
+        User_profile_object.save()
+        
         return render(request, 'home.html')
     else:
         print('not save')

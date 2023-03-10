@@ -153,11 +153,13 @@ def fetchsearch(request):
 
 def Home(request):
     user = get_user(request)
-    
     if user.is_authenticated:
         print(user.username)
-        profile = User_profile.objects.filter(Username = user).first().Profile
-        return render(request, 'home.html', {'profile_pic': profile})
+        try:
+            profile = User_profile.objects.filter(Username = user).first().Profile
+            return render(request, 'home.html', {'profile_pic': profile})
+        except TypeError:
+            print("Error: profile not uploaded")
     
     return render(request, 'home.html')
 
@@ -203,9 +205,82 @@ def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, b
 
     # Build the PDF document and save it to disk
     doc.build(elements)
-   
+
+def pdf_generator_2(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
+    pdf=canvas.Canvas("air_ticket.pdf",bottomup=0)
+    pdf.setTitle("air_tickets")
+
+    image = ImageReader("my-image.png")
+    pdf.drawImage(image, -455, -452, width=450, height=230, mask='auto')
+
+
+
+
+
+    pdf.translate(inch,inch)
+    pdf.setStrokeColorRGB(.1,.43,.55,.77)
+    pdf.setFillColor(HexColor('#daf7f7'))
+    pdf.rect(5,5,width=450,height=450,stroke=1,fill=1) 
+    # write multiple lines of text inside the rectangle
+    text_lines = [
+        "To:New Jersey",
+       "From:New York                        Boarding Time:"
+
 
     
+
+
+    ]
+    pdf.setFillColor(colors.black)
+
+    y = 100  # initial y-coordinate for the first line of text
+    for line in text_lines:
+        pdf.drawString(20, y, line)
+        y -= 20  # decrease y-coordinate for each subsequent line of text
+        # Create the table data as a list of lists
+    table_data = [
+        ['CQ435','Shreya','D15'],
+        ['CQ435','Nishant','B15'],
+        ['CQ435','Dhruv','C15'],
+        ['serialno','passenger_name','seat'],
+
+    ]
+
+    # Create the table and set its style
+    table = Table(table_data, colWidths=[0.8*inch, 2*inch, 0.8*inch], hAlign='CENTER')
+    table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+        ('TEXTCOLOR', (0, 0), (0, -3), colors.whitesmoke),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        #thirdline
+        ('BACKGROUND', (0, 0), (-1, 0), colors.beige),
+        #second line
+        ('BACKGROUND', (0, 2), (-1, 0), colors.beige),
+        #first line
+        ('BACKGROUND', (0, 3), (-1, 0), colors.beige),
+         ('BOTTOMPADDING', (0, 3), (-1, 3), 15),
+        #heaading row changes
+        ('BACKGROUND', (0, 3), (-1, 3), colors.gray),
+
+         ('ALIGN', (0, 3), (-1, 3), 'LEFT'),
+        ('FONTNAME', (0, 3), (-1, 3), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 3), (-1, 3), 8),
+    ]))
+
+    # Get the width and height of the table
+    table_width, table_height = table.wrapOn(pdf, 10, 10)
+
+    # Calculate the y-coordinate to start the table at
+    table_y = 80 - table_height
+
+    # Draw the table on the PDF canvas
+    table.drawOn(pdf, x=55, y=145)
+    pdf.setFont('Helvetica', 14)
+    pdf.setFillColor(colors.black)
+    pdf.drawString(20, 300, "Thank you for choosing our airline!")
+    pdf.drawString(20, 345, "Have a safe and pleasant flight.")
+
+    pdf.save()
     
 
         
