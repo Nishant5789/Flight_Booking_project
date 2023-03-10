@@ -43,7 +43,7 @@
           Choose a date:
         </label>
         <input id="depart_date" class="bg-white rounded-lg p-2 w-full" name="depart_date"  type="date">
-        <span class="text-red-500 text-md font-bold block" id="date_error"></span>
+        <span class="text-red-500 text-md  font-bold block" id="date_error"></span>
         <label for="traveler_class" class="block text-gray-900 font-bold text-xl mb-2">Choose traveller class </label>
         <select id="select_class" name="traveler_class" required class="block w-full py-2 pl-3 pr-10 mt-1 text-base bg-white border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
           <option value="option1">Economy</option>
@@ -73,8 +73,10 @@
         
         submitBtn.addEventListener('click', (event) => {
         event.preventDefault(); 
-        const input_airline_id = document.getElementById("airline_id").value;
+        let input_airline_id = document.getElementById("airline_id").value;
         const input_airline_password = document.getElementById("airline_password");
+        console.log(input_airline_id);
+        input_airline_id = input_airline_id.toString().slice(-3);
         const action = `/manageflight/${input_airline_id}/`;
         form.action = action;
         form.submit(); // submit the form with the new action

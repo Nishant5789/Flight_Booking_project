@@ -1,6 +1,5 @@
 from django.contrib import admin
+from Airline.models import Airline, Airline_manager
 
-# Register your models here.
-from Airline.models import Airline
-
+admin.site.register(Airline_manager)
 admin.site.register(Airline)

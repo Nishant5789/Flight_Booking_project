@@ -13,6 +13,7 @@ class Flight(models.Model):
         return str(self.Flight_id)
     
 class Flight_component(models.Model):
+    Sr_no = models.IntegerField(default=0)
     Temparal_ID = models.CharField(primary_key=True, max_length=1000)
     Flight_Id = models.IntegerField(default=12)
     Airline_logo = models.ImageField(upload_to ='media/')

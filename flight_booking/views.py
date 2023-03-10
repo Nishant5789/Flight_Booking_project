@@ -20,6 +20,7 @@ import uuid
 from django.views.decorators.csrf import csrf_protect
 
 def addpassengerdetails(request, Temparal_ID):
+    
     print("adding details")     
     No_ticket = request.POST.get('Ticket')
     Flight_component_object = Flight_component.objects.get(pk=Temparal_ID)
@@ -32,8 +33,11 @@ def addpassengerdetails(request, Temparal_ID):
     number_list = []
     for i in range(1, int(No_ticket)+1):
         number_list.append(str(i))
+        
+    user = get_user(request)
+    profile = User_profile.objects.filter(Username = user).first().Profile
     
-    return render(request, 'passanger_register.html', {"number_list":number_list,"No_ticket": No_ticket,"flight_object":Flight_component_object})
+    return render(request, 'passanger_register.html', {"number_list":number_list,"No_ticket": No_ticket,"flight_object":Flight_component_object,'profile_pic': profile})
 
 def handle_confirmation(request, Temparal_ID, No_ticket):
     
@@ -72,7 +76,7 @@ def fetchsearch(request):
     # depart_str = 'mumbai'
     # arrive_str = 'banglore'
     fetch_flights = []
-    No = 0;
+    temp = 0
     
     for i in Flight.objects.all():
         routes_dist_str = i.Dist_bet_airports
@@ -91,6 +95,7 @@ def fetchsearch(request):
         routes_distance = [int(i) for i in test_dist]
         routes_time = find_time_between_place(routes_distance)
         dist = {}
+        
 
         for i in range(len(routes_distance)+1):
             dist[routes_path[i]] = i
@@ -113,11 +118,12 @@ def fetchsearch(request):
             temp_duration = duration_time.split(":")
             duration_time = str(temp_duration[0]) + \
                 " Hour " + str(temp_duration[1]) + " minute"
-            
             unique_id = str(uuid.uuid4())
             print(unique_id)
+            temp=temp+1
         
             Flight_component.objects.create(
+                Sr_no=int(temp),
                 Temparal_ID=unique_id,
                 Flight_Id=Flight_Id,
                 Airline_logo=Airline_logo,
@@ -128,27 +134,34 @@ def fetchsearch(request):
                 Price=Price,
                 Total_ticket=Total_ticket,
                 Depart_time=depart_time,
-                Arrive_time=arrive_time
+                Arrive_time=arrive_time,
             )
             fetch_flights.append(Flight_component.objects.get(pk=unique_id))
+
             print(Flight_component.objects.get(pk=unique_id).Total_ticket)
         else:
             print("flight not found")
         
     print(fetch_flights)
+    user = get_user(request)
+    if user.is_authenticated:
+        print(user.username)
+        profile = User_profile.objects.filter(Username = user).first().Profile
+        return render(request,  'fetchflights.html', {"Flights": fetch_flights,'profile_pic': profile})
                       
     return render(request, 'fetchflights.html', {"Flights": fetch_flights})
 
 def Home(request):
     user = get_user(request)
-    
     if user.is_authenticated:
         print(user.username)
-        profile = User_profile.objects.filter(Username = user).first().Profile
-        return render(request, 'home.html', {'profile_pic': profile})
+        try:
+            profile = User_profile.objects.filter(Username = user).first().Profile
+            return render(request, 'home.html', {'profile_pic': profile})
+        except TypeError:
+            print("Error: profile not uploaded")
     
     return render(request, 'home.html')
-    
 
 def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
     # Create a new PDF document
@@ -192,9 +205,82 @@ def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, b
 
     # Build the PDF document and save it to disk
     doc.build(elements)
-   
+
+def pdf_generator_2(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
+    pdf=canvas.Canvas("air_ticket.pdf",bottomup=0)
+    pdf.setTitle("air_tickets")
+
+    image = ImageReader("my-image.png")
+    pdf.drawImage(image, -455, -452, width=450, height=230, mask='auto')
+
+
+
+
+
+    pdf.translate(inch,inch)
+    pdf.setStrokeColorRGB(.1,.43,.55,.77)
+    pdf.setFillColor(HexColor('#daf7f7'))
+    pdf.rect(5,5,width=450,height=450,stroke=1,fill=1) 
+    # write multiple lines of text inside the rectangle
+    text_lines = [
+        "To:New Jersey",
+       "From:New York                        Boarding Time:"
+
 
     
+
+
+    ]
+    pdf.setFillColor(colors.black)
+
+    y = 100  # initial y-coordinate for the first line of text
+    for line in text_lines:
+        pdf.drawString(20, y, line)
+        y -= 20  # decrease y-coordinate for each subsequent line of text
+        # Create the table data as a list of lists
+    table_data = [
+        ['CQ435','Shreya','D15'],
+        ['CQ435','Nishant','B15'],
+        ['CQ435','Dhruv','C15'],
+        ['serialno','passenger_name','seat'],
+
+    ]
+
+    # Create the table and set its style
+    table = Table(table_data, colWidths=[0.8*inch, 2*inch, 0.8*inch], hAlign='CENTER')
+    table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+        ('TEXTCOLOR', (0, 0), (0, -3), colors.whitesmoke),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        #thirdline
+        ('BACKGROUND', (0, 0), (-1, 0), colors.beige),
+        #second line
+        ('BACKGROUND', (0, 2), (-1, 0), colors.beige),
+        #first line
+        ('BACKGROUND', (0, 3), (-1, 0), colors.beige),
+         ('BOTTOMPADDING', (0, 3), (-1, 3), 15),
+        #heaading row changes
+        ('BACKGROUND', (0, 3), (-1, 3), colors.gray),
+
+         ('ALIGN', (0, 3), (-1, 3), 'LEFT'),
+        ('FONTNAME', (0, 3), (-1, 3), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 3), (-1, 3), 8),
+    ]))
+
+    # Get the width and height of the table
+    table_width, table_height = table.wrapOn(pdf, 10, 10)
+
+    # Calculate the y-coordinate to start the table at
+    table_y = 80 - table_height
+
+    # Draw the table on the PDF canvas
+    table.drawOn(pdf, x=55, y=145)
+    pdf.setFont('Helvetica', 14)
+    pdf.setFillColor(colors.black)
+    pdf.drawString(20, 300, "Thank you for choosing our airline!")
+    pdf.drawString(20, 345, "Have a safe and pleasant flight.")
+
+    pdf.save()
     
 
         
