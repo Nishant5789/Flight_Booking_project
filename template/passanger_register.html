@@ -30,7 +30,6 @@
   
     {{ Wallet_balance|json_script:'Wallet_balance' }}
     {{ Total_price |json_script:'total_price' }}
-
     <div class="w-full bg-gree">
       <form action="/bookticket/{{flight_object.Temparal_ID}}/{{No_ticket}}" id="final_form" method="post">
         {% csrf_token %}
