@@ -32,7 +32,7 @@
       <form class="px-2 py-7" id="form" action="/fetchflights/" method="POST">
         {% csrf_token %}
         <label class=" block text-gray-900 font-bold text-xl mb-2" data-provide="typeahead"  for="depart">Depart</label>
-        <input id="depart" class="typeahead bg-white rounded-lg p-2 w-full" name="depart" data-provide="typeahead type="text">
+        <input id="depart" class="typeahead bg-white rounded-lg p-2 w-full" name="depart" data-provide="typeahead" type="text">
         <span class="text-red-500 text-md font-bold block" id="depart_error"></span>
         <label class="block text-gray-900 font-bold text-xl mb-2" for="arrive">
           Arrive
@@ -56,6 +56,7 @@
       </form>
     </div>
   </div>
+  {% include 'footer.html' %}
 
   <script>   
         // nav bar feature 

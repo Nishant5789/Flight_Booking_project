@@ -25,6 +25,8 @@ def addpassengerdetails(request, Temparal_ID):
     No_ticket = request.POST.get('Ticket')
     Flight_component_object = Flight_component.objects.get(pk=Temparal_ID)
     flight_id = Flight_component_object.Flight_Id
+    flight_price = Flight_component_object.Price
+    Total_price = int(flight_price) * int(No_ticket)
     Current_ticket = Flight.objects.get(pk=flight_id).Total_ticket
     update_ticket = Current_ticket-int(No_ticket)
     Flight.objects.filter(pk=flight_id).update(Total_ticket=update_ticket)
@@ -36,8 +38,16 @@ def addpassengerdetails(request, Temparal_ID):
         
     user = get_user(request)
     profile = User_profile.objects.filter(Username = user).first().Profile
-    
-    return render(request, 'passanger_register.html', {"number_list":number_list,"No_ticket": No_ticket,"flight_object":Flight_component_object,'profile_pic': profile})
+    Wallet_balance = User_profile.objects.filter(Username = user).first().Balance
+
+    return render(request, 'passanger_register.html', {"number_list":number_list,
+                                                       "No_ticket": No_ticket,
+                                                       "flight_object":Flight_component_object,
+                                                       'profile_pic': profile,
+                                                       'flight_price': flight_price,
+                                                       'Total_price': Total_price,
+                                                       'Wallet_balance':Wallet_balance,
+                                                       })
 
 def handle_confirmation(request, Temparal_ID, No_ticket):
     

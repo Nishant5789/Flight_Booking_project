@@ -22,29 +22,32 @@
             action="/manageflight/update/{{flight.Flight_id}}/" method="POST">
               {% csrf_token %}
               {{flight.Routes | json_script:"routes_text"}}
-              {{flight.Timeduration | json_script:"time_duration_text"}}
+              {{flight.Dist_bet_airports | json_script:"distance_text"}}
               {{flight.Total_ticket | json_script:"total_tickets_text"}}
               {{flight.Depart_time | json_script:"depart_time_text"}}
               <h2 class="text-xl font-medium mb-4">flight detail</h2>
               <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="routes">Routes</label>
-                <input class="border border-gray-400 p-2 w-full rounded-lg" type="text" id="routes" name="routes" placeholder="Enter Routes">
+                <input class="border border-gray-400 p-2 w-full rounded-lg" required type="text" id="routes" name="routes" placeholder="Enter Routes">
               </div>
               <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="distance">Distance between airports</label>
-                <input class="border border-gray-400 p-2 w-full rounded-lg" type="text" id="distance" name="distance" placeholder="Enter Distance">
+                <input class="border border-gray-400 p-2 w-full rounded-lg" required type="text" id="distance" name="distance" placeholder="Enter Distance">
                 <span class="text-red-500 text-md font-bold block" id="dist_error"></span>
               </div>
               <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="total_tickets">Total Tickets</label>
-                <input class="border border-gray-400 p-2 w-full rounded-lg" type="text" id="total_tickets" name="total_tickets" placeholder="Enter Total Tickets">
+                <input class="border border-gray-400 p-2 w-full rounded-lg" required type="text" id="total_tickets" name="total_tickets" placeholder="Enter Total Tickets">
                 <span class="text-red-500 text-md font-bold block" id="ticket_error"></span>
               </div>
               <div class="mb-4">
                 <label class="block text-gray-700 font-medium mb-2" for="depart_time">Depart Time</label>
-                <input class="border border-gray-400 p-2 w-full rounded-lg" type="time"  id="depart_time" name="depart_time">
+                <input class="border border-gray-400 p-2 w-full rounded-lg" required type="time"  id="depart_time" name="depart_time">
               </div>
               <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg" type="submit">update</button>
+              <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Back To Home
+              </a>
             </form>
           </div>
     </div>
@@ -113,6 +116,7 @@
     else{
       dist_error.textContent = ""
       console.log('pass4');
+      alert("flight detail update succesfully ")
     }
     // event.preventDefault();
   });

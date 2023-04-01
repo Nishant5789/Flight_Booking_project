@@ -14,8 +14,9 @@
 </head>
 <body>
       <div class="container mx-auto py-6 bg-purple-400 w-8/12 h-[40rem]">
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-x-4">
           <h2 class="text-5xl mx-auto font-serif font-bold">Manage Flight</h2>
+
           <!-- <button class="btn bg-white py-2 px-4 rounded">Add Flight</button> -->
           <button onclick="redirectTo('{{window.location.host}}/manageflight/add/{{Airline_id}}')" class="flex items-center justify-center outline-none rounded-md px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md transition-all duration-1000 ease-in-out hover:border-2 border-transparent hover:border-black shadow-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -23,9 +24,12 @@
             </svg>
             Add Flight
           </button>
+          <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            Back To Home
+          </a>
         </div>
         {% for i in flights %}
-        <div class="my-2 bg-white rounded-lg border-2 border-dark shadow-md p-2">
+        <div class="my-2 bg-white roun ded-lg border-2 border-dark shadow-md p-2">
           <h3 class="text-lg font-bold">Flight Id : <span class="font-normal">{{i.flight_id}}</span></h3>
             <div class="mt-4 flex justify-between items-center space-x-4">
               <p><strong>Flight Route : </strong>{{i.route_des}}</p>
