@@ -1,5 +1,7 @@
 # Flight_Booking_project
 
+# video link for project : https://drive.google.com/drive/u/0/folders/1VGqoco9gV8YIPLNeWrquLeTwC8C6_2NY
+
 The GitHub repository for the flight booking project is a comprehensive codebase for a web application designed to enable users to book flights. The project has been developed using several technologies including HTML, CSS, Tailwind, JavaScript, and Django. It includes several features that make it a complete solution for a flight booking application.
 
 The repository contains various folders and files that are used to build the application. The frontend code is located in the "static" and "templates" folders, while the backend code is located in the "views" and "models" folders.
