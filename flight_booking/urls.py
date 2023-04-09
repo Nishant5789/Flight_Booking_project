@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.Home),
     path('fetchflights/', views.fetchsearch),
+    path('contact_us/', views.contactPage),
     path('fetchflights/<slug:Temparal_ID>/', views.addpassengerdetails, name="addpassengerdetails"),
     path('bookticket/<slug:Temparal_ID>/<slug:No_ticket>', views.handle_confirmation, name="handle_confirmation"),
     path('manageflight/', include('Airline.urls')),

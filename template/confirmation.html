@@ -13,17 +13,42 @@
   <body class="bg-gray-300">
 
     {% include 'navbar.html' %}
-
+  
+    {{pdfname | json_script:"pdfname"}}
     <div class="h-screen  w-full bg-cover bg-40 ">
         <div class="flex flex-col items-center">
           <h1 class="text-5xl bg-green-400 px-4 py-4 rounded-sm font-serif shadow-2xl  m-4">Congralations </h1>
           <h3 class="text-2xl text-black font-semibold m-4">Download Your Ticket for Journey</h1>
             <p class="font-sans">/{{pdfname}}/</p>
-            <a href="{{pdfname}}" target="_blank" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mb-3 rounded focus:outline-none focus:shadow-outline" download>Download</a>
+            <a href="{{pdfname}}"   download>Download</a>
+            <button onclick="downloadPDF()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mb-3 rounded ">Download PDF</button>
             <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Back to Home</a>
         </div>
       </div>
       <script>
+
+      const pdfname = JSON.parse(document.getElementById('pdfname').textContent)
+      function downloadPDF() {
+      // Replace 'example.pdf' with the name of your PDF file
+      var fileURL = `/media/pdfs/${pdfname}`;
+      
+      // Create a new anchor element and set its href attribute to the file URL
+      var link = document.createElement('a');
+      link.href = fileURL;
+      
+      // Set the download attribute of the anchor element to the file name
+      link.download = `${pdfname}`;
+      
+      // Append the anchor element to the document body
+      document.body.appendChild(link);
+      
+      // Trigger a click event on the anchor element
+      link.click();
+      
+      // Remove the anchor element from the document body
+      document.body.removeChild(link);
+    }
+
            // nav bar feature 
          // Toggle dropdown menu for flights button
       function toggleDropdown() {
@@ -34,18 +59,7 @@
       function toggleAvatarDropdown() {
         document.getElementById("avatar-dropdown").classList.toggle("hidden");
       }
-    //   // submit manage airline
-    //     const form = document.querySelector('#airline_login');
-    //     const submitBtn = document.querySelector('#airline_submit');
-
-    //     submitBtn.addEventListener('click', (event) => {
-    //     event.preventDefault(); 
-    //     const input_airline_id = document.getElementById("airline_id").value;
-    //     const input_airline_password = document.getElementById("airline_password");
-    //     const action = `/manageflight/${input_airline_id}/`;
-    //     form.action = action;
-    //     form.submit(); // submit the form with the new action
-    // });
+ 
       </script>
   </body>
 </html>

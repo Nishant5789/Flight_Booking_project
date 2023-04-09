@@ -4,20 +4,20 @@
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg mx-auto">
-            <div class="flex justify-end py-2 pr-2">
+            <div class="flex justify-end pt-3 pb-2 px-4">
                 <button class="text-gray-600 hover:text-gray-800 focus:outline-none" type="button" aria-label="Close" onclick="document.querySelector('#modal').classList.add('hidden');">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <form class="px-12 py-12" method="POST" action="" id="airline_login">
+            <form class="px-12 py-4" method="POST" action="" id="airline_login">
                 {% csrf_token %}
                 <div class="mb-4">
                     <label class="block text-gray-700 font-bold mb-2" for="airline_username">
                         Airline ID
                     </label>
-                    <input class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="airline_id" type="text" placeholder="Enter your airline_id" required>
+                    <input class=" border rounded w-full py-2 px-3 text-gray-700 " id="airline_id" type="text" placeholder="Enter your airline_id" required>
                 </div>
                 <div class="flex items-center justify-between">
                     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" id="airline_submit" type="button">
