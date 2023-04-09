@@ -14,8 +14,10 @@
           <img class="h-56  rounded-full  object-cover" src="/media/{{profile_pic}}">
           <form method="post" class="flex my-2" enctype="multipart/form-data" action="/auth/profile/{{user.username}}">
             {% csrf_token %}
-            <input type="file" name="image">
-            <button type="submit">Upload</button>
+            <div class="flex justify-between items-center">
+                <input type="file" name="image">
+                <button type="submit" class="px-4 bg-blue-500 foucus:bg-blue-800 hover:bg-blue-400 rounded  py-2">Upload</button>
+            </div>
             </form>
         </div>
         <!-- Profile information with input fields and change profile button -->

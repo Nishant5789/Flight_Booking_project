@@ -12,7 +12,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Image, Table, TableStyle
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from django.db import IntegrityError
@@ -175,7 +175,9 @@ def Home(request):
 
 def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, boarding_Time):
     # Create a new PDF document
-    doc = SimpleDocTemplate(file_name)
+    file_path = "./media/pdfs/" + file_name
+    
+    doc = SimpleDocTemplate(file_path, pagesize=letter)
     # Create a list to hold the elements to be included in the PDF document
     elements = []
     # Add the airline name and logo to the document
@@ -187,6 +189,8 @@ def pdf_generator(file_name, airline_name, list_passenger ,departure, arrival, b
     elements.append(Paragraph(f'Departure: {departure}', getSampleStyleSheet()['Normal']))
     elements.append(Paragraph(f'Arrival: {arrival}', getSampleStyleSheet()['Normal']))
     elements.append(Paragraph(f'Boarding Time: {boarding_Time}', getSampleStyleSheet()['Normal']))
+    spacer = Spacer(1, 0.25*inch) # 1 inch width and 0.25 inch height
+    elements.append(spacer)
 
     # Create a list of lists to hold the data for the table
     data = [['Passenger Name', 'Date of Birth', 'Gender']]
@@ -292,20 +296,10 @@ def pdf_generator_2(file_name, airline_name, list_passenger ,departure, arrival,
 
     pdf.save()
     
-
-        
-
-
+def contactPage(request):
+    return render(request, 'contactpage.html')
     
-    
-    
-    
-    
-
-
-
 def find_time_between_place(dist):
-    
     result = []
     for i in range(len(dist)):
         result.append(abs(dist[i])/115)
